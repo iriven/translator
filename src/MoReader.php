@@ -10,7 +10,7 @@ class MoReader
     private $packMode = 'V';
     private $file;
     private $revision;
-    private $totalBytes;
+ 
     private $numMessages;
     private $messages = [];
 
@@ -31,14 +31,15 @@ class MoReader
     private function parseContents()
     {
         $this->revision = $this->readData()[1];
-        $this->totalBytes = $this->readData()[1];
         $this->numMessages = $this->readData()[1];
+      
+        $messagesOffset = $this->readData()[1];
         $translationsOffset = $this->readData()[1];
-        fseek($this->file, $this->numMessages);
-        $msgTemp = $this->readData(2 * $this->totalBytes);
+        fseek($this->file, $messagesOffset);
+        $msgTemp = $this->readData(2 * $this->numMessages);
 
         fseek($this->file, $translationsOffset);
-        $tnsTemp = $this->readData(2 * $this->totalBytes);
+        $tnsTemp = $this->readData(2 * $this->numMessages);
 
         for ($a = 0; $a < $this->numMessages; ++$a) {
             $cb = $a * 2 + 1;
