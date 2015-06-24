@@ -42,14 +42,14 @@ class MoReader
 
         for ($a = 0; $a < $this->numMessages; ++$a) {
             $cb = $a * 2 + 1;
-            if ($msgTemp[$cb] != 0) {
+            if (isset($msgTemp[$cb]) && $msgTemp[$cb] != 0) {
                 fseek($this->file, $msgTemp[$cb + 1]);
                 $original = (array) fread($this->file, $msgTemp[$cb]);
             } else {
                 $original = [''];
             }
 
-            if ($tnsTemp[$cb] != 0) {
+            if (isset($tnsTemp[$cb]) && $tnsTemp[$cb] != 0) {
                 fseek($this->file, $tnsTemp[$cb + 1]);
                 $translation = explode("\0", fread($this->file, $tnsTemp[$cb]));
                 $this->setMessage($original, $translation);
